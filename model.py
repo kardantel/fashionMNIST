@@ -10,14 +10,11 @@ warnings.filterwarnings('ignore')
 
 
 class Model:
-    '''
-    Export
-    '''
-
     def __init__(self, train_images, train_labels, test_images, test_labels,
                  class_names):
         '''
-        Returns
+        Contains the Keras model for classification, compiler and model
+        testing.
         '''
         self.train_images = train_images
         self.train_labels = train_labels
@@ -25,42 +22,25 @@ class Model:
         self.test_labels = test_labels
         self.class_names = class_names
 
-        # Definimos el modelo con el que vamos a entrenar.
-        # Cada una de estas secuencias es una capa de la red neuronal.
-
-        # "Aplanamos" cada una de las imágenes de 28x28.
-        # Creamos una primera capa: aplicamos una densidad a las capas de 128 y
-        # una FA ReLU.
-        # Creamos una segunda capa: se encarga de aprender un poco más con
-        # densidad 10 y FA softmax.
+        # The model with which we are going to train is defined.
         self.model = keras.Sequential([keras.layers.Flatten(input_shape=(28, 28)),
                                        keras.layers.Dense(
                                            128, activation=tf.nn.relu),
                                        keras.layers.Dense(10,
                                                           activation=tf.nn.softmax)])
 
-        # Creamos el compilador del modelo con el optimizador 'Adam' (una
-        # variación avanzada de Batch Gradient Descent).
-        # Optimizador que también puede ser llamado como 'Adam()' si antes se
-        # importa la biblioteca correspondiente. Esto es como el modelo se
-        # actualiza basado en el set de datos que ve y la funcion de perdida.
-        # Mide qué tan exacto es el modelo durante el entrenamiento. La idea es
-        # minimizar el error para dirigir el modelo en la direccion adecuada.
-        # Se usa para monitorear los pasos de entrenamiento y de pruebas. Se
-        # usa accuracy (exactitud), la fraccion de la imagenes que son
-        # correctamente clasificadas.
+        # We create the model compiler with the 'Adam' optimizer (an advanced
+        # variation of Batch Gradient Descent).
         self.model.compile(optimizer='adam',
                            loss='sparse_categorical_crossentropy',
                            metrics=['accuracy'])
 
-        # Entrenamos el modelo con las imágenes y etiquetas de entrenamiento.
-        # 'epochs' es la cantidad de iteraciones que se hacen para entrenar el
-        # modelo.
+        # We train the model with the training images and labels.
         self.model.fit(self.train_images, self.train_labels, epochs=5)
 
     def acc(self):
         '''
-        The model is evaluated with the test images and labels.
+        Accuracy calculation is performed with test images and labels.
         '''
         self.test_loss, self.test_acc = self.model.evaluate(self.test_images,
                                                             self.test_labels)
@@ -68,14 +48,13 @@ class Model:
 
     def eval(self, print_img=False):
         '''
-        'predictions[i]' nos retorna un array con las probabilidades de
-        pertenecer a cada uno de los labels, es decir, la probabilidad de que
-        sea cada prenda (bastaría multiplicar por 100 para sacar el porcentaje)
-        por lo que la predicción viene a ser la probabilidad máxima en ese
-        array; y lo obtenemos con 'np.argmax' que nos dará el índice del valor
-        máximo del array, entonces ya tendríamos el índice de la predicción y
-        bastaría con obtener el nombre de la prenda usando ese índice en la
-        lista de los nombres: 'class_names[predicted_label]'.
+        The prediction is made with the test images.
+        You can choose to print 25 images used for the prediction with the
+        `print_img` parameter.
+
+        ## Parameters
+        print_img: boolean [optional], defualt=False
+            If `True` it prints 25 test images used in the prediction.
         '''
         self.predictions = self.model.predict(self.test_images)
 
@@ -89,8 +68,8 @@ class Model:
                 plt.imshow(self.test_images[i], cmap='Greys')
                 predicted_label = np.argmax(self.predictions[i])
                 true_label = self.test_labels[i]
-                # Si la etiqueta de prueba es igual a la predicha, el color
-                # será azul; de lo contrario será roja.
+                # If the test label is the same as predicted,the color will be
+                # blue; otherwise it will be red.
                 if predicted_label == true_label:
                     color = 'blue'
                 else:

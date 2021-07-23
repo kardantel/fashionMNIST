@@ -1,16 +1,11 @@
 import warnings
-
 from matplotlib import pyplot as plt
-
-import seaborn as sns
-import numpy as np
-
 warnings.filterwarnings('ignore')
 
 
 class Utils:
     '''
-    Class that contains all the methods used by the classifiers.
+    Class that contains auxiliar methods used by the classifier.
     '''
     @classmethod
     def one_fashion(cls, train_images, num=0):
@@ -34,16 +29,16 @@ class Utils:
         '''
         Print 25 different wearable inside MNIST.
         '''
-        # Ploteamos imágenes 10x10 para evitar que las muestre en tamaño real.
+        # 10x10 images are plotted to avoid displaying them in real size.
         plt.figure(figsize=(10, 10))
-        # Ploteamos 25 imágenes.
+        # 25 images are plotted.
         for i in range(25):
             plt.subplot(5, 5, i + 1)
             plt.xticks([])
             plt.yticks([])
             plt.grid('off')
-            # Imágenes de entrenamiento. Color en blanco y negro.
+            # Training images. Grayscale color.
             plt.imshow(train_images[i], cmap='Greys')
-            # Muestra la etiqueta o grupo al que pertenece la imagen mostrada.
+            # Tag or group to which the displayed image belongs is displayed.
             plt.xlabel(class_names[train_labels[i]])
         plt.show()
