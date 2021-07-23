@@ -66,7 +66,7 @@ class Model:
                                                             self.test_labels)
         print('Accuracy:', self.test_acc)
 
-    def eval(self, print=False):
+    def eval(self, print_img=False):
         '''
         'predictions[i]' nos retorna un array con las probabilidades de
         pertenecer a cada uno de los labels, es decir, la probabilidad de que
@@ -79,7 +79,7 @@ class Model:
         '''
         self.predictions = self.model.predict(self.test_images)
 
-        if print:
+        if print_img:
             plt.figure(figsize=(10, 10))
             for i in range(25):
                 plt.subplot(5, 5, i + 1)
@@ -94,7 +94,6 @@ class Model:
                 if predicted_label == true_label:
                     color = 'blue'
                 else:
-                    # print()
                     color = 'red'
 
                 plt.xlabel('{} ({})'.format(self.class_names[predicted_label],
@@ -104,11 +103,12 @@ class Model:
 
     def plot_image(self, i):
         '''
-        Prints
+        Prints the garment, its real name, the hit percentage and the
+        classified label.
+        If the label was correctly classified, the text is printed in blue,
+        otherwise in red.
         '''
         true_label, img = self.test_labels[i], self.test_images[i]
-        plt.figure(figsize=(6, 3))
-        plt.subplot(1, 2, 1)
         plt.grid(False)
         plt.xticks([])
         plt.yticks([])
@@ -125,10 +125,15 @@ class Model:
                                              self.class_names[true_label]),
                    color=color)
 
+    def plot_value_array(self, i):
+        '''
+        Prints the graph that indicates which label it was classified on.
+        If the label was correctly classified, the text is printed in blue,
+        otherwise in red.
+        '''
         true_label = self.test_labels[i]
-        plt.subplot(1, 2, 2)
         plt.grid(False)
-        plt.xticks(range(10))
+        plt.xticks(range(10), self.class_names, rotation=45)
         plt.yticks([])
         thisplot = plt.bar(range(10), self.predictions[i], color="#777777")
         plt.ylim([0, 1])
@@ -136,13 +141,12 @@ class Model:
 
         thisplot[predicted_label].set_color('red')
         thisplot[true_label].set_color('blue')
-        plt.show()
 
     def print_all(self, num_rows, num_cols):
         '''
-        Traza las primeras imágenes de prueba X, sus etiquetas predichas y las
-        etiquetas verdaderas.
-        Colorea las predicciones correctas en azul y las incorrectas en rojo.
+        Plots the first X test images, their predicted labels, and the
+        true labels.
+        Color the correct predictions in blue and the incorrect ones in red.
         '''
         # num_rows = 9
         # num_cols = 7
@@ -150,35 +154,8 @@ class Model:
         plt.figure(figsize=(2 * 2 * num_cols, 2 * num_rows))
         for i in range(num_images):
             plt.subplot(num_rows, 2 * num_cols, 2 * i + 1)
-
-            true_label, img = self.test_labels[i], self.test_images[i]
-            plt.grid(False)
-            plt.xticks([])
-            plt.yticks([])
-            plt.imshow(img, cmap='Greys')
-
-            predicted_label = np.argmax(self.predictions[i])
-            if predicted_label == true_label:
-                color = 'blue'
-            else:
-                color = 'red'
-
-            plt.xlabel("{} {:2.0f}% ({})".format(self.class_names[predicted_label],
-                                                 100 *
-                                                 np.max(self.predictions[i]),
-                                                 self.class_names[true_label]),
-                       color=color)
-
+            self.plot_image(i)
             plt.subplot(num_rows, 2 * num_cols, 2 * i + 2)
-            true_label = self.test_labels[i]
-            plt.grid(False)
-            plt.xticks(range(10))
-            plt.yticks([])
-            thisplot = plt.bar(range(10), self.predictions[i], color="#777777")
-            plt.ylim([0, 1])
-            predicted_label = np.argmax(self.predictions[i])
-
-            thisplot[predicted_label].set_color('red')
-            thisplot[true_label].set_color('blue')
+            self.plot_value_array(i)
         plt.tight_layout()
         plt.show()
