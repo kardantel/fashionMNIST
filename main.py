@@ -80,7 +80,8 @@ def main():
     Main function.
     '''
     # MNIST data is loaded
-    train_images, test_images, train_labels, test_labels, class_names = load_mnist()
+    train_images, test_images, train_labels, test_labels, class_names = load_mnist(
+        print_img=True)
     # The model is instantiated
     model = Model(train_images, train_labels,
                   test_images, test_labels, class_names)
