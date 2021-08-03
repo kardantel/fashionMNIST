@@ -13,11 +13,18 @@ This repository contains the code made to create a wearable image classifier, ob
 ## How to use
 In `main.py` you can find the 4 main methods:
 - `load_mnist(print_img=True)` allows you to load the Fashion MNIST dataset with necessary pretreatment. Print 2 images: one is garment 200 from the dataset.
+
 ![](https://i.imgur.com/k5GjZcl.png)
+
 The other image prints a sample of 25 grayscale images.
+
 ![](https://i.imgur.com/fPZ4mko.png)
+
 - `plot_example()` prints the result of sorting into two wearable items: one correctly sorted and the other not.
+
 ![](https://i.imgur.com/eYy45h8.png)
+
 - `acc()` make the Accuracy calculation is performed with test images and labels. In this case, an accuracy of **87,6%** was achieved.
 - `print_all(num_rows, num_cols)` prints the classification obtained for a certain number of usable, depending on the number of rows and columns. In this case, values `num_rows=5` and` num_cols=4` were chosen to obtain an image with 20 classified images.
+
 ![](https://i.imgur.com/abpUmW2.png)
